@@ -18,6 +18,10 @@ void main() {
   test('Multiple numbers should return their sum', () {
     expect(calculator.add('1,2,3,4'), equals(10));
   });
+
+  test('Newline should be treated as a delimiter', () {
+    expect(calculator.add('1\n2,3'), equals(6));
+  });
 }
 
 class StringCalculator {
@@ -26,7 +30,7 @@ class StringCalculator {
       return 0;
     }
 
-    List<int> numList = numbers.split(',').map(int.parse).toList();
+    List<int> numList = numbers.split(RegExp(',|\n')).map(int.parse).toList();
     return numList.reduce((sum, num) => sum + num);
   }
 }
