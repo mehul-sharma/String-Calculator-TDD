@@ -1,5 +1,5 @@
 # String Calculator TDD
-I have generated this readme file with the help of chatGPT :)
+I have generated this readme.md file with the help of chatGPT :)
 
 ## Introduction
 This project implements a **String Calculator** using **Test-Driven Development (TDD)** in Dart. It follows a step-by-step approach, where test cases are written first and then implemented to pass them.
