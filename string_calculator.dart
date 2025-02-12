@@ -38,6 +38,17 @@ void main() {
     expect(() => calculator.add('1,-2,3,-4'), throwsA(predicate((e) =>
     e is Exception && e.toString() == 'Exception: negative numbers not allowed -2,-4')));
   });
+
+  // Test case for multiple custom delimiters
+  test('Multiple custom delimiters should be supported', () {
+    expect(calculator.add('//[*][%]\n1*2%3'), equals(6));
+  });
+
+  // Test case for multiple custom delimiters with different lengths
+  test('Multiple custom delimiters of different lengths should be supported', () {
+    expect(calculator.add('//[***]\n1***2***3'), equals(6));
+    expect(calculator.add('//[delim1][delim2]\n1delim12delim23'), equals(6));
+  });
 }
 
 class StringCalculator {
@@ -51,8 +62,18 @@ class StringCalculator {
     // Check if the string starts with a custom delimiter
     if (numbers.startsWith('//')) {
       var parts = numbers.split('\n');
-      delimiter = RegExp.escape(parts[0].substring(2)); // Extract custom delimiter
+      var delimiterPart = parts[0].substring(2);
       numbers = parts.sublist(1).join('\n'); // Remove delimiter declaration
+
+      // Check for multiple custom delimiters
+      if (delimiterPart.contains('[') && delimiterPart.contains(']')) {
+        var delimiters = RegExp(r'\[(.*?)\]').allMatches(delimiterPart)
+            .map((m) => RegExp.escape(m.group(1)!))
+            .join('|');
+        delimiter = delimiters;
+      } else {
+        delimiter = RegExp.escape(delimiterPart);
+      }
     }
 
     // Split numbers using the determined delimiter and parse them into a list of integers
