@@ -14,6 +14,10 @@ void main() {
   test('Two numbers should return their sum', () {
     expect(calculator.add('1,5'), equals(6));
   });
+
+  test('Multiple numbers should return their sum', () {
+    expect(calculator.add('1,2,3,4'), equals(10));
+  });
 }
 
 class StringCalculator {
