@@ -1,5 +1,4 @@
 import 'package:test/test.dart';
-import 'string_calculator.dart';
 
 void main() {
   final calculator = StringCalculator();
@@ -7,10 +6,17 @@ void main() {
   test('Empty string should return 0', () {
     expect(calculator.add(''), equals(0));
   });
+
+  test('Single number should return itself', () {
+    expect(calculator.add('1'), equals(1));
+  });
 }
 
 class StringCalculator {
   int add(String numbers) {
-    return 0;
+    if (numbers.isEmpty) {
+      return 0;
+    }
+    return int.parse(numbers);
   }
 }
