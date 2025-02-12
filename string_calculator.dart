@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+import 'string_calculator.dart';
 
 void main() {
   final calculator = StringCalculator();
@@ -22,6 +23,10 @@ void main() {
   test('Newline should be treated as a delimiter', () {
     expect(calculator.add('1\n2,3'), equals(6));
   });
+
+  test('Custom delimiter should be supported', () {
+    expect(calculator.add('//;\n1;2'), equals(3));
+  });
 }
 
 class StringCalculator {
@@ -30,7 +35,14 @@ class StringCalculator {
       return 0;
     }
 
-    List<int> numList = numbers.split(RegExp(',|\n')).map(int.parse).toList();
+    String delimiter = ',|\n';
+    if (numbers.startsWith('//')) {
+      var parts = numbers.split('\n');
+      delimiter = RegExp.escape(parts[0].substring(2));
+      numbers = parts.sublist(1).join('\n');
+    }
+
+    List<int> numList = numbers.split(RegExp(delimiter)).map(int.parse).toList();
     return numList.reduce((sum, num) => sum + num);
   }
 }
