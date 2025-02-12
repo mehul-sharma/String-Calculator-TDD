@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+
 void main() {
   final calculator = StringCalculator();
 
@@ -31,6 +32,12 @@ void main() {
   test('Custom delimiter should be supported', () {
     expect(calculator.add('//;\n1;2'), equals(3));
   });
+
+  // Test case for handling negative numbers
+  test('Negative numbers should throw an exception', () {
+    expect(() => calculator.add('1,-2,3,-4'), throwsA(predicate((e) =>
+    e is Exception && e.toString() == 'Exception: negative numbers not allowed -2,-4')));
+  });
 }
 
 class StringCalculator {
@@ -50,6 +57,12 @@ class StringCalculator {
 
     // Split numbers using the determined delimiter and parse them into a list of integers
     List<int> numList = numbers.split(RegExp(delimiter)).map(int.parse).toList();
+
+    // Check for negative numbers and throw an exception
+    List<int> negativeNumbers = numList.where((num) => num < 0).toList();
+    if (negativeNumbers.isNotEmpty) {
+      throw Exception('negative numbers not allowed ${negativeNumbers.join(',')}');
+    }
 
     // Return the sum of all parsed numbers
     return numList.reduce((sum, num) => sum + num);
