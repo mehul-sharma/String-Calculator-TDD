@@ -10,6 +10,10 @@ void main() {
   test('Single number should return itself', () {
     expect(calculator.add('1'), equals(1));
   });
+
+  test('Two numbers should return their sum', () {
+    expect(calculator.add('1,5'), equals(6));
+  });
 }
 
 class StringCalculator {
@@ -17,6 +21,8 @@ class StringCalculator {
     if (numbers.isEmpty) {
       return 0;
     }
-    return int.parse(numbers);
+
+    List<int> numList = numbers.split(',').map(int.parse).toList();
+    return numList.reduce((sum, num) => sum + num);
   }
 }
